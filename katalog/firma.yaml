@@ -1,0 +1,38 @@
+# Firmendaten und Standardtexte – erscheinen in JEDER Anzeige.
+# Alles mit "TODO" bitte ausfüllen, bevor die erste Anzeige online geht.
+
+name: Selbstbau-Verleih
+website: www.selbstbau-verleih.de
+telefon: "TODO: Telefonnummer"
+email: mail@selbstbau-verleih.de
+adresse: "TODO: Straße Nr., PLZ Ort"
+plz: "TODO"
+oeffnungszeiten: "TODO: z. B. Mo–Fr 7–18 Uhr, Sa 8–12 Uhr"
+
+# Wie lange eine Anzeige bei Kleinanzeigen läuft, bevor sie verlängert
+# werden muss (bitte nach Kontoeinrichtung prüfen und ggf. anpassen).
+laufzeit_tage: 60
+
+# Kleinanzeigen-Titel sind auf 65 Zeichen begrenzt; dieser Zusatz wird
+# angehängt, wenn noch Platz ist.
+titel_zusatz: "mieten"
+
+# Standardtexte. Mehrzeilig mit "|". Leere Einträge werden weggelassen.
+einleitung: |
+  Werkzeug und Baumaschinen einfach tageweise mieten – statt teuer kaufen.
+  Profi-Geräte, gewartet und sofort einsatzbereit.
+
+mietbedingungen: |
+  TODO: Mietbedingungen in Kurzform, z. B.:
+  - Abholung und Rückgabe zu unseren Öffnungszeiten
+  - Personalausweis bei Abholung erforderlich
+  - Kaution in bar oder per EC-Karte
+  - Gerät gereinigt zurückgeben
+  Es gelten unsere vollständigen Mietbedingungen (siehe Website).
+
+lieferung: |
+  TODO: Lieferung möglich? z. B. "Lieferung im Umkreis von 20 km gegen Aufpreis."
+
+schluss: |
+  Weitere Geräte finden Sie in unseren anderen Anzeigen und auf
+  www.selbstbau-verleih.de. Reservierung gerne telefonisch oder per Nachricht.

@@ -1,0 +1,26 @@
+# BEISPIEL – bitte durch echte Daten ersetzen.
+titel: Minibagger 1,5 t
+kategorie: "Haus & Garten > Heimwerken"
+preise:
+  tag: 129
+  wochenende: 219
+  woche: 549
+kaution: 500
+beschreibung: |
+  Kompakter Minibagger für Garten- und Landschaftsbau, Fundamente und
+  Leitungsgräben. Passt durch schmale Durchgänge. Mit Einweisung bei Abholung.
+technische_daten:
+  Einsatzgewicht: 1.500 kg
+  Grabtiefe: 2,2 m
+  Breite: 99 cm
+zubehoer:
+  - Tieflöffel 30 cm
+  - Grabenräumlöffel 80 cm
+hinweise: |
+  Transport mit PKW-Anhänger (Anhängerkupplung, 3,5 t Anhängelast) möglich –
+  Anhänger kann mitgemietet werden.
+bilder: []
+kleinanzeigen:
+  status: entwurf
+  anzeigen_id:
+  online_seit:

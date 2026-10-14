@@ -1,0 +1,25 @@
+# BEISPIEL – bitte durch echte Daten ersetzen.
+titel: Abbruchhammer Bosch GSH 11 VC
+kategorie: "Haus & Garten > Heimwerken"   # beim Einstellen bei Kleinanzeigen prüfen
+preise:            # in Euro
+  tag: 25
+  wochenende: 40   # Sa–Mo
+  woche: 110
+kaution: 150
+beschreibung: |
+  Kraftvoller 11-kg-Abbruchhammer für Stemm- und Abbrucharbeiten an Beton,
+  Mauerwerk und Fliesen. Vibrationsgedämpft für ermüdungsarmes Arbeiten.
+technische_daten:
+  Leistung: 1.700 W
+  Schlagenergie: 23 J
+  Gewicht: 11 kg
+zubehoer:
+  - Spitzmeißel
+  - Flachmeißel
+  - Transportkoffer
+bilder:
+  - bilder/abbruchhammer-bosch-gsh-11-vc-1.jpg
+kleinanzeigen:
+  status: entwurf      # entwurf | online | pausiert
+  anzeigen_id:         # nach dem Einstellen eintragen
+  online_seit:         # JJJJ-MM-TT
