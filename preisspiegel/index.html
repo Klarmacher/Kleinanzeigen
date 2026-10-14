@@ -1,0 +1,496 @@
+<title>Selbstbau-Verleih Preisspiegel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: eine Arbeitsspalte – Vergleich oben, darunter Wettbewerber und eigene Geräte; Zahlen in Mono, Signalorange nur für Aktionen */
+:root {
+  --bg: #eef0f2; --surface: #ffffff; --ink: #1d232b; --muted: #5b6672; --line: #d5dae0;
+  --accent: #c2410c; --accent-ink: #ffffff; --soft: #f6f7f9;
+  --good: #1f7a4a; --good-bg: #e3f3ea; --bad: #b42318; --bad-bg: #fbe9e7; --mid: #6b5b0f; --mid-bg: #f6f0d6;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #13171c; --surface: #1b2128; --ink: #e6e9ed; --muted: #9aa5b1; --line: #2e3742;
+  --accent: #f0814a; --accent-ink: #1a1007; --soft: #222a33;
+  --good: #6fd29b; --good-bg: #173326; --bad: #ff8f80; --bad-bg: #3a1d1a; --mid: #e3cf74; --mid-bg: #343019;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #13171c; --surface: #1b2128; --ink: #e6e9ed; --muted: #9aa5b1; --line: #2e3742;
+  --accent: #f0814a; --accent-ink: #1a1007; --soft: #222a33;
+  --good: #6fd29b; --good-bg: #173326; --bad: #ff8f80; --bad-bg: #3a1d1a; --mid: #e3cf74; --mid-bg: #343019;
+  color-scheme: dark; }
+
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: 1.9rem; font-weight: 800; }
+h2 { font-size: 1.25rem; font-weight: 700; }
+h3 { font-size: 1.02rem; font-weight: 700; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 64ch; margin-top: 6px; }
+.eyebrow { font: 600 .72rem/1 var(--f-body); letter-spacing: .09em; text-transform: uppercase; color: var(--accent); }
+td.num, .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+section { display: grid; gap: 14px; min-width: 0; }
+.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 8px 16px; }
+.sec-head p { color: var(--muted); font-size: .9rem; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 16px; min-width: 0; }
+.tablebox { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 .74rem/1.2 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--soft); }
+td.num, th.num { text-align: right; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+tr.detail td { background: var(--soft); padding-top: 4px; }
+.sub { color: var(--muted); font-size: .84rem; }
+.pill { display: inline-block; padding: 2px 9px; border-radius: 99px; font-size: .78rem; font-weight: 600; white-space: nowrap; }
+.pill.good { color: var(--good); background: var(--good-bg); }
+.pill.bad { color: var(--bad); background: var(--bad-bg); }
+.pill.mid { color: var(--mid); background: var(--mid-bg); }
+.pill.none { color: var(--muted); background: var(--soft); }
+.tag { font-size: .72rem; padding: 1px 7px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+a { color: var(--accent); text-underline-offset: 2px; overflow-wrap: anywhere; }
+
+form, .formgrid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); align-items: end; }
+.wide { grid-column: 1 / -1; }
+label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); font-weight: 500; }
+input, select, textarea { font: inherit; font-size: .92rem; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 5px; padding: 7px 9px; width: 100%; box-sizing: border-box; min-width: 0; }
+td select { min-width: 170px; }
+textarea { resize: vertical; min-height: 110px; font-size: .86rem; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; }
+button { font: 600 .86rem/1 var(--f-body); padding: 9px 14px; border-radius: 5px; cursor: pointer;
+  border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); white-space: nowrap; }
+button.ghost { background: transparent; color: var(--accent); }
+button.quiet { background: transparent; color: var(--muted); border-color: var(--line); padding: 6px 10px; font-weight: 500; }
+button.danger { background: transparent; color: var(--bad); border-color: var(--bad); padding: 6px 10px; }
+button:disabled { opacity: .5; cursor: default; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+.wlist { display: grid; gap: 10px; }
+details.w { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; min-width: 0; }
+details.w > summary { list-style: none; cursor: pointer; padding: 14px 16px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+details.w > summary::-webkit-details-marker { display: none; }
+details.w > summary::before { content: "▸"; color: var(--muted); }
+details.w[open] > summary::before { content: "▾"; }
+details.w .body { padding: 0 16px 16px; display: grid; gap: 16px; min-width: 0; }
+.box { border-top: 1px dashed var(--line); padding-top: 14px; display: grid; gap: 10px; min-width: 0; }
+.note { font-size: .84rem; color: var(--muted); }
+.status { font-size: .86rem; color: var(--muted); min-height: 1.3em; }
+.status.err { color: var(--bad); }
+.empty { padding: 22px 16px; color: var(--muted); text-align: left; }
+.empty strong { color: var(--ink); }
+.banner { padding: 12px 14px; border-radius: 6px; background: var(--mid-bg); color: var(--ink); font-size: .9rem; }
+.banner[hidden] { display: none; }
+.suggest { display: grid; gap: 8px; }
+.suggest .item { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: center;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); }
+.suggest .item > div { min-width: 0; }
+@media (prefers-reduced-motion: no-preference) { button { transition: filter .15s; } button:hover:not(:disabled) { filter: brightness(1.08); } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Selbstbau-Verleih · Marktbeobachtung</div>
+    <h1>Preisspiegel Mietgeräte</h1>
+    <p class="lede">Ihre Mietpreise im Vergleich zu Verleihern aus der Umgebung. Wettbewerber eintragen, Preise erfassen oder die Preisliste einer Website einfügen und von der KI zuordnen lassen.</p>
+  </header>
+
+  <div class="banner" id="offline" hidden>Die Datenablage ist in dieser Ansicht nicht verfügbar. Öffnen Sie die Seite angemeldet bei claude.ai, um Einträge zu sehen und zu speichern.</div>
+  <div class="banner" id="readonly" hidden>Sie können diese Seite ansehen, aber keine Einträge ändern.</div>
+
+  <section id="sec-vergleich">
+    <div class="sec-head">
+      <div><div class="eyebrow">Übersicht</div><h2>Tagespreis im Vergleich</h2></div>
+      <p>Abweichung Ihres Tagespreises vom Durchschnitt der Wettbewerber. Zeile antippen für Details.</p>
+    </div>
+    <div class="tablebox"><table>
+      <thead><tr><th>Gerät</th><th class="num">Ihr Preis / Tag</th><th class="num">Günstigster</th><th class="num">Ø Wettbewerb</th><th class="num">Angebote</th><th>Einordnung</th></tr></thead>
+      <tbody id="vergleich"><tr><td colspan="6" class="empty">Lade Daten …</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section id="sec-wett">
+    <div class="sec-head">
+      <div><div class="eyebrow">Konkurrenz</div><h2>Wettbewerber</h2></div>
+      <p>Firma oder Website eintragen, dann beim Eintrag Preise erfassen.</p>
+    </div>
+    <div class="panel">
+      <form id="f-wett" autocomplete="off">
+        <label>Firma<input id="w-name" required placeholder="z. B. Mietpark Musterstadt"></label>
+        <label>Website<input id="w-web" placeholder="www.beispiel.de"></label>
+        <label>Ort<input id="w-ort" placeholder="Ort oder PLZ"></label>
+        <label>Entfernung (km)<input id="w-km" type="number" min="0" step="1" inputmode="numeric"></label>
+        <label class="wide">Notiz<input id="w-notiz" placeholder="z. B. hat auch Lieferservice, Sonntag geöffnet"></label>
+        <div class="row"><button type="submit" class="needs-write">Wettbewerber hinzufügen</button></div>
+      </form>
+      <p class="status" id="s-wett" role="status"></p>
+    </div>
+
+    <div class="panel ai-only" id="vorschlag-panel">
+      <div class="formgrid">
+        <label class="wide" style="margin:0"><span><strong style="color:var(--ink)">KI-Vorschläge</strong> – bekannte Verleiher in Ihrer Region nennen lassen</span></label>
+        <label>Ort oder PLZ<input id="v-ort" placeholder="z. B. 34117 Kassel"></label>
+        <label>Umkreis (km)<input id="v-km" type="number" min="5" step="5" value="30"></label>
+        <div class="row"><button type="button" class="ghost" id="b-vorschlag">Vorschläge holen</button></div>
+      </div>
+      <p class="note" style="margin-top:8px">Die KI antwortet aus ihrem Wissen, ohne Live-Suche im Internet. Firmen und Websites vor dem Übernehmen kurz prüfen. Preise schlägt sie bewusst nicht vor.</p>
+      <p class="status" id="s-vorschlag" role="status"></p>
+      <div class="suggest" id="vorschlaege"></div>
+    </div>
+
+    <div class="wlist" id="wettliste"><div class="panel empty">Lade Wettbewerber …</div></div>
+  </section>
+
+  <section id="sec-geraete">
+    <div class="sec-head">
+      <div><div class="eyebrow">Eigenes Sortiment</div><h2>Ihre Geräte und Preise</h2></div>
+      <p>Grundlage für den Vergleich. Preise in Euro inkl. MwSt.</p>
+    </div>
+    <div class="panel">
+      <form id="f-geraet" autocomplete="off">
+        <label class="wide">Gerät<input id="g-name" required placeholder="z. B. Rüttelplatte 90 kg"></label>
+        <label>1 Tag<input id="g-tag" type="number" min="0" step="0.5" inputmode="decimal"></label>
+        <label>Wochenende<input id="g-we" type="number" min="0" step="0.5" inputmode="decimal"></label>
+        <label>1 Woche<input id="g-woche" type="number" min="0" step="0.5" inputmode="decimal"></label>
+        <div class="row"><button type="submit" class="needs-write">Gerät hinzufügen</button></div>
+      </form>
+      <p class="status" id="s-geraet" role="status"></p>
+    </div>
+    <div class="tablebox"><table>
+      <thead><tr><th>Gerät</th><th class="num">1 Tag</th><th class="num">Wochenende</th><th class="num">1 Woche</th><th></th></tr></thead>
+      <tbody id="geraeteliste"><tr><td colspan="5" class="empty">Lade Geräte …</td></tr></tbody>
+    </table></div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const S = { geraete: [], wett: [], preise: [], canWrite: true, ready: { g: false, w: false, p: false } };
+  let db = null, sample = null;
+  const offen = new Set();          // aufgeklappte Wettbewerber
+  const offenGeraet = new Set();    // aufgeklappte Vergleichszeilen
+  const kiErgebnis = {};            // wettbewerberId -> Zeilen zur Prüfung
+  const loeschen = new Set();       // Löschen bestätigen (zweiter Klick)
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const zahl = (v) => { if (v === "" || v == null) return null; const n = Number(String(v).replace(",", ".")); return Number.isFinite(n) ? n : null; };
+  const euro = (n) => n == null ? "–" : n.toLocaleString("de-DE", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + " €";
+  const datum = (iso) => iso ? new Date(iso).toLocaleDateString("de-DE") : "";
+  const heute = () => new Date().toISOString().slice(0, 10);
+  const href = (url) => { if (!url) return ""; const u = /^https?:\/\//i.test(url) ? url : "https://" + url; try { return new URL(u).href; } catch { return ""; } };
+  const host = (url) => { try { return new URL(href(url)).host.replace(/^www\./, ""); } catch { return url; } };
+  const status = (id, text, err) => { const el = $(id); el.textContent = text || ""; el.classList.toggle("err", !!err); };
+  const fehlerText = (e) => {
+    const c = e && e.code;
+    if (c === "not_granted" || c === "sampling_disabled") return "Die KI ist für diese Seite nicht freigegeben.";
+    if (c === "rate_limited") return "Gerade zu viele Anfragen. Bitte in einer Minute erneut versuchen.";
+    if (c === "invalid_json") return "Die KI-Antwort war unvollständig. Bitte erneut versuchen oder weniger Text einfügen.";
+    if (c === "prompt_too_large") return "Der eingefügte Text ist zu lang. Bitte nur den Preisteil einfügen.";
+    if (c === "quota_exceeded") return "Die Datenablage ist voll. Bitte alte Einträge löschen.";
+    if (c === "invalid_argument") return "Speichern nicht erlaubt.";
+    return "Das hat nicht geklappt. Bitte erneut versuchen.";
+  };
+
+  // ---------- Darstellung ----------
+  function preiseVon(wid) { return S.preise.filter((p) => p.wettbewerber_id === wid); }
+  function wettName(wid) { return (S.wett.find((w) => w.id === wid) || {}).name || "Unbekannt"; }
+
+  function einordnung(eigen, schnitt) {
+    if (eigen == null || schnitt == null) return '<span class="pill none">keine Daten</span>';
+    const d = (eigen - schnitt) / schnitt * 100;
+    const txt = (d > 0 ? "+" : "") + Math.round(d) + " %";
+    if (Math.abs(d) <= 5) return `<span class="pill mid">im Markt · ${txt}</span>`;
+    return d < 0 ? `<span class="pill good">günstiger · ${txt}</span>` : `<span class="pill bad">teurer · ${txt}</span>`;
+  }
+
+  function renderVergleich() {
+    const tb = $("vergleich");
+    if (!S.ready.g) return;
+    if (!S.geraete.length) { tb.innerHTML = '<tr><td colspan="6" class="empty"><strong>Noch keine eigenen Geräte.</strong> Legen Sie unten unter „Ihre Geräte und Preise“ das erste Gerät an.</td></tr>'; return; }
+    tb.innerHTML = S.geraete.map((g) => {
+      const angebote = S.preise.filter((p) => p.geraet_id === g.id && p.tag != null);
+      const tage = angebote.map((p) => p.tag);
+      const min = tage.length ? Math.min(...tage) : null;
+      const avg = tage.length ? tage.reduce((a, b) => a + b, 0) / tage.length : null;
+      const minP = angebote.find((p) => p.tag === min);
+      const auf = offenGeraet.has(g.id);
+      let html = `<tr data-geraet="${esc(g.id)}" style="cursor:pointer" aria-expanded="${auf}">
+        <td><strong>${esc(g.name)}</strong>${g.beispiel ? ' <span class="tag">Beispiel</span>' : ""}</td>
+        <td class="num">${euro(g.tag)}</td>
+        <td class="num">${euro(min)}${minP ? `<div class="sub">${esc(wettName(minP.wettbewerber_id))}</div>` : ""}</td>
+        <td class="num">${euro(avg == null ? null : Math.round(avg * 100) / 100)}</td>
+        <td class="num">${angebote.length}</td>
+        <td>${einordnung(g.tag, avg)}</td></tr>`;
+      if (auf) {
+        const alle = S.preise.filter((p) => p.geraet_id === g.id);
+        html += `<tr class="detail"><td colspan="6">${alle.length ? `<div class="tablebox" style="border:0;background:transparent"><table style="min-width:560px">
+          <thead><tr><th>Wettbewerber</th><th>Bezeichnung dort</th><th class="num">Tag</th><th class="num">Wochenende</th><th class="num">Woche</th><th class="num">Kaution</th><th>Stand</th></tr></thead><tbody>
+          ${alle.map((p) => `<tr><td>${esc(wettName(p.wettbewerber_id))}</td><td>${esc(p.bezeichnung)}${p.hinweis ? `<div class="sub">${esc(p.hinweis)}</div>` : ""}</td>
+            <td class="num">${euro(p.tag)}</td><td class="num">${euro(p.wochenende)}</td><td class="num">${euro(p.woche)}</td><td class="num">${euro(p.kaution)}</td>
+            <td><span class="sub">${esc(datum(p.stand))}</span>${href(p.quelle) ? ` <a href="${esc(href(p.quelle))}" target="_blank" rel="noopener">Quelle</a>` : ""}</td></tr>`).join("")}
+          </tbody></table></div>` : '<p class="sub">Für dieses Gerät sind noch keine Wettbewerbspreise erfasst.</p>'}
+          <p class="sub" style="margin-top:6px">Ihre Preise: Wochenende ${euro(g.wochenende)} · Woche ${euro(g.woche)}</p></td></tr>`;
+      }
+      return html;
+    }).join("");
+  }
+
+  function geraeteOptionen(sel) {
+    return '<option value="">– nicht zugeordnet –</option>' + S.geraete.map((g) => `<option value="${esc(g.id)}"${g.id === sel ? " selected" : ""}>${esc(g.name)}</option>`).join("");
+  }
+
+  function renderWett() {
+    const box = $("wettliste");
+    if (!S.ready.w) return;
+    // Eingaben in offenen Formularen über das Neuzeichnen retten
+    const FELDER = "textarea, input:not([type=checkbox]), select:not([data-act]):not([data-ki-map])";
+    const schluessel = (el) => (el.closest("details.w")?.dataset.w || "") + "|" + (el.name || (el.dataset.kiText != null ? "kitext" : el.dataset.kiQuelle != null ? "kiquelle" : ""));
+    const entwurf = {};
+    box.querySelectorAll(FELDER).forEach((el) => { if (el.value) entwurf[schluessel(el)] = el.value; });
+    if (!S.wett.length) { box.innerHTML = '<div class="panel empty"><strong>Noch keine Wettbewerber.</strong> Tragen Sie oben eine Firma mit Website ein oder lassen Sie sich Vorschläge für Ihre Region geben.</div>'; return; }
+    box.innerHTML = S.wett.map((w) => {
+      const pr = preiseVon(w.id);
+      const ki = kiErgebnis[w.id];
+      return `<details class="w" data-w="${esc(w.id)}"${offen.has(w.id) ? " open" : ""}>
+        <summary><h3>${esc(w.name)}</h3>
+          ${w.ort ? `<span class="sub">${esc(w.ort)}${w.km != null ? ` · ${esc(w.km)} km` : ""}</span>` : (w.km != null ? `<span class="sub">${esc(w.km)} km</span>` : "")}
+          <span class="sub">${pr.length} Preise</span>${w.herkunft === "ki" ? ' <span class="tag">KI-Vorschlag</span>' : ""}${w.herkunft === "recherche" ? ' <span class="tag">Recherche</span>' : ""}</summary>
+        <div class="body">
+          <div class="row" style="justify-content:space-between">
+            <div class="sub">${href(w.website) ? `<a href="${esc(href(w.website))}" target="_blank" rel="noopener">${esc(host(w.website))}</a>` : "Keine Website hinterlegt"}${w.notiz ? ` · ${esc(w.notiz)}` : ""}</div>
+            <button type="button" class="danger needs-write" data-act="del-w" data-id="${esc(w.id)}">${loeschen.has("w:" + w.id) ? "Wirklich löschen?" : "Wettbewerber löschen"}</button>
+          </div>
+          ${pr.length ? `<div class="tablebox"><table style="min-width:600px"><thead><tr><th>Bezeichnung</th><th>Ihr Gerät</th><th class="num">Tag</th><th class="num">Wochenende</th><th class="num">Woche</th><th class="num">Kaution</th><th></th></tr></thead><tbody>
+            ${pr.map((p) => `<tr><td>${esc(p.bezeichnung)}<div class="sub">${esc(datum(p.stand))}${p.herkunft === "ki" ? " · per KI ausgelesen" : ""}${p.hinweis ? " · " + esc(p.hinweis) : ""}</div></td>
+              <td><select data-act="map" data-id="${esc(p.id)}" class="needs-write" aria-label="Zuordnung">${geraeteOptionen(p.geraet_id)}</select></td>
+              <td class="num">${euro(p.tag)}</td><td class="num">${euro(p.wochenende)}</td><td class="num">${euro(p.woche)}</td><td class="num">${euro(p.kaution)}</td>
+              <td><button type="button" class="quiet needs-write" data-act="del-p" data-id="${esc(p.id)}">${loeschen.has("p:" + p.id) ? "Sicher?" : "Entfernen"}</button></td></tr>`).join("")}
+            </tbody></table></div>` : '<p class="sub">Noch keine Preise erfasst.</p>'}
+
+          <div class="box">
+            <h3>Preis von Hand erfassen</h3>
+            <form data-form="preis" data-w="${esc(w.id)}" autocomplete="off">
+              <label>Ihr Gerät<select name="geraet">${geraeteOptionen("")}</select></label>
+              <label>Bezeichnung dort<input name="bez" required placeholder="wie beim Wettbewerber genannt"></label>
+              <label>1 Tag<input name="tag" type="number" min="0" step="0.01" inputmode="decimal"></label>
+              <label>Wochenende<input name="we" type="number" min="0" step="0.01" inputmode="decimal"></label>
+              <label>1 Woche<input name="woche" type="number" min="0" step="0.01" inputmode="decimal"></label>
+              <label>Kaution<input name="kaution" type="number" min="0" step="1" inputmode="decimal"></label>
+              <label class="wide">Quelle (Link zur Preisseite)<input name="quelle" placeholder="${esc(w.website || "https://…")}"></label>
+              <div class="row"><button type="submit" class="needs-write">Preis speichern</button></div>
+            </form>
+          </div>
+
+          <div class="box ai-only">
+            <h3>Preisliste einfügen und per KI auslesen</h3>
+            <p class="note">Preisseite des Wettbewerbers öffnen, alles markieren, kopieren und hier einfügen. Die KI liest nur Preise, die im Text stehen, und ordnet sie Ihren Geräten zu. Sie prüfen das Ergebnis vor dem Speichern.</p>
+            <textarea data-ki-text="${esc(w.id)}" aria-label="Eingefügter Text der Preisseite" placeholder="Text der Preisseite hier einfügen …"></textarea>
+            <label>Quelle (Link zur Preisseite)<input data-ki-quelle="${esc(w.id)}" placeholder="${esc(w.website || "https://…")}"></label>
+            <div class="row"><button type="button" class="ghost" data-act="ki" data-id="${esc(w.id)}">Preise auslesen</button></div>
+            <p class="status" id="s-ki-${esc(w.id)}" role="status"></p>
+            ${ki && ki.length ? `<div class="tablebox"><table style="min-width:600px"><thead><tr><th>Übernehmen</th><th>Bezeichnung</th><th>Ihr Gerät</th><th class="num">Tag</th><th class="num">WE</th><th class="num">Woche</th><th class="num">Kaution</th></tr></thead><tbody>
+              ${ki.map((r, i) => `<tr><td><input type="checkbox" data-ki-chk="${esc(w.id)}" data-i="${i}" ${r.an ? "checked" : ""} aria-label="übernehmen"></td>
+                <td>${esc(r.bezeichnung)}${r.hinweis ? `<div class="sub">${esc(r.hinweis)}</div>` : ""}</td>
+                <td><select data-ki-map="${esc(w.id)}" data-i="${i}" aria-label="Zuordnung">${geraeteOptionen(r.geraet_id)}</select></td>
+                <td class="num">${euro(r.tag)}</td><td class="num">${euro(r.wochenende)}</td><td class="num">${euro(r.woche)}</td><td class="num">${euro(r.kaution)}</td></tr>`).join("")}
+              </tbody></table></div>
+              <div class="row"><button type="button" class="needs-write" data-act="ki-save" data-id="${esc(w.id)}">Ausgewählte speichern</button><button type="button" class="quiet" data-act="ki-clear" data-id="${esc(w.id)}">Verwerfen</button></div>` : ""}
+          </div>
+        </div></details>`;
+    }).join("");
+    box.querySelectorAll(FELDER).forEach((el) => { const v = entwurf[schluessel(el)]; if (v != null) el.value = v; });
+    rechte();
+  }
+
+  function renderGeraete() {
+    const tb = $("geraeteliste");
+    if (!S.ready.g) return;
+    if (!S.geraete.length) { tb.innerHTML = '<tr><td colspan="5" class="empty">Noch keine Geräte. Oben das erste Gerät mit Preisen eintragen.</td></tr>'; return; }
+    tb.innerHTML = S.geraete.map((g) => `<tr><td>${esc(g.name)}${g.beispiel ? ' <span class="tag">Beispiel</span>' : ""}</td>
+      <td class="num">${euro(g.tag)}</td><td class="num">${euro(g.wochenende)}</td><td class="num">${euro(g.woche)}</td>
+      <td style="text-align:right"><button type="button" class="quiet needs-write" data-act="del-g" data-id="${esc(g.id)}">${loeschen.has("g:" + g.id) ? "Sicher?" : "Entfernen"}</button></td></tr>`).join("");
+    rechte();
+  }
+
+  function renderAlles() { renderVergleich(); renderWett(); renderGeraete(); }
+  function rechte() {
+    document.querySelectorAll(".needs-write").forEach((b) => { b.disabled = !S.canWrite || !db; });
+    document.querySelectorAll(".ai-only").forEach((el) => { el.hidden = !sample; });
+  }
+
+  // ---------- Speichern ----------
+  async function speichern(statusId, fn, ok) {
+    if (!db) return;
+    try { await fn(); status(statusId, ok || ""); }
+    catch (e) { if (e && e.code === "invalid_argument") { S.canWrite = false; $("readonly").hidden = false; rechte(); } status(statusId, fehlerText(e), true); }
+  }
+
+  $("f-wett").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const name = $("w-name").value.trim(); if (!name) return;
+    const daten = { name, website: $("w-web").value.trim(), ort: $("w-ort").value.trim(), km: zahl($("w-km").value), notiz: $("w-notiz").value.trim(), herkunft: "manuell", erstellt: new Date().toISOString() };
+    speichern("s-wett", async () => { await db.collection("wettbewerber").add(daten); ev.target.reset(); }, `„${name}“ hinzugefügt.`);
+  });
+
+  $("f-geraet").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const name = $("g-name").value.trim(); if (!name) return;
+    const daten = { name, tag: zahl($("g-tag").value), wochenende: zahl($("g-we").value), woche: zahl($("g-woche").value), erstellt: new Date().toISOString() };
+    speichern("s-geraet", async () => { await db.collection("geraete").add(daten); ev.target.reset(); }, `„${name}“ hinzugefügt.`);
+  });
+
+  $("wettliste").addEventListener("toggle", (ev) => {
+    const d = ev.target.closest && ev.target.closest("details.w"); if (!d) return;
+    d.open ? offen.add(d.dataset.w) : offen.delete(d.dataset.w);
+  }, true);
+
+  $("wettliste").addEventListener("submit", (ev) => {
+    const f = ev.target; if (f.dataset.form !== "preis") return;
+    ev.preventDefault();
+    const wid = f.dataset.w, fd = new FormData(f);
+    const daten = { wettbewerber_id: wid, geraet_id: fd.get("geraet") || null, bezeichnung: String(fd.get("bez") || "").trim(),
+      tag: zahl(fd.get("tag")), wochenende: zahl(fd.get("we")), woche: zahl(fd.get("woche")), kaution: zahl(fd.get("kaution")),
+      quelle: String(fd.get("quelle") || "").trim() || (S.wett.find((w) => w.id === wid) || {}).website || "", stand: heute(), herkunft: "manuell" };
+    f.reset();  // vor dem Schreiben, weil der Snapshot das Formular neu zeichnet
+    speichern("s-wett", () => db.collection("preise").add(daten), "Preis gespeichert.");
+  });
+
+  $("wettliste").addEventListener("change", (ev) => {
+    const t = ev.target;
+    if (t.dataset.act === "map") speichern("s-wett", () => db.doc("preise/" + t.dataset.id).update({ geraet_id: t.value || null }), "Zuordnung geändert.");
+    if (t.dataset.kiMap) kiErgebnis[t.dataset.kiMap][+t.dataset.i].geraet_id = t.value || null;
+    if (t.dataset.kiChk) kiErgebnis[t.dataset.kiChk][+t.dataset.i].an = t.checked;
+  });
+
+  function zweiterKlick(key, aktion) {
+    if (loeschen.has(key)) { loeschen.delete(key); aktion(); return; }
+    loeschen.add(key); renderAlles();
+    setTimeout(() => { if (loeschen.delete(key)) renderAlles(); }, 4000);
+  }
+
+  document.addEventListener("click", (ev) => {
+    const zeile = ev.target.closest("tr[data-geraet]");
+    if (zeile) { const id = zeile.dataset.geraet; offenGeraet.has(id) ? offenGeraet.delete(id) : offenGeraet.add(id); renderVergleich(); return; }
+    const b = ev.target.closest("button[data-act]"); if (!b) return;
+    const id = b.dataset.id, act = b.dataset.act;
+    if (act === "del-w") zweiterKlick("w:" + id, () => speichern("s-wett", async () => {
+      for (const p of preiseVon(id)) await db.doc("preise/" + p.id).delete();
+      await db.doc("wettbewerber/" + id).delete();
+    }, "Wettbewerber gelöscht."));
+    if (act === "del-p") zweiterKlick("p:" + id, () => speichern("s-wett", () => db.doc("preise/" + id).delete(), "Preis entfernt."));
+    if (act === "del-g") zweiterKlick("g:" + id, () => speichern("s-geraet", () => db.doc("geraete/" + id).delete(), "Gerät entfernt."));
+    if (act === "ki") kiAuslesen(id, b);
+    if (act === "ki-clear") { delete kiErgebnis[id]; renderWett(); }
+    if (act === "ki-save") kiSpeichern(id);
+  });
+
+  // ---------- KI ----------
+  async function kiAuslesen(wid, knopf) {
+    const text = (document.querySelector(`[data-ki-text="${CSS.escape(wid)}"]`).value || "").trim();
+    const sid = "s-ki-" + wid;
+    if (text.length < 20) { status(sid, "Bitte zuerst den Text der Preisseite einfügen.", true); return; }
+    const w = S.wett.find((x) => x.id === wid) || {};
+    const liste = S.geraete.map((g) => `${g.id}: ${g.name}`).join("\n") || "(keine)";
+    const prompt = `Du liest die Preisseite des Werkzeug- und Baumaschinenverleihs "${w.name || ""}".
+Aufgabe: Alle Mietpreise aus dem Text herauslesen und, wenn eindeutig vergleichbar, einem Gerät aus unserer Liste zuordnen.
+Regeln:
+- Nur Zahlen übernehmen, die wörtlich im Text stehen. Nichts schätzen oder ergänzen. Fehlt ein Wert: null.
+- "tag" = Preis für 1 Tag (bzw. 24 h), "wochenende" = Wochenendpreis, "woche" = Preis für 1 Woche, "kaution" = Kaution. Alles in Euro als Zahl.
+- Steht dabei, dass Preise netto bzw. zzgl. MwSt. sind, oder gilt ein Preis nur für einen halben Tag o. ä.: kurz in "hinweis" vermerken.
+- "geraet_id" = ID aus unserer Liste, wenn es dasselbe oder ein klar vergleichbares Gerät ist (gleiche Geräteart und ähnliche Größe/Gewichtsklasse), sonst null.
+Unsere Geräte (ID: Name):
+${liste}
+
+Antworte nur mit einem JSON-Array, z. B.:
+[{"bezeichnung":"Rüttelplatte 90 kg","geraet_id":null,"tag":39,"wochenende":59,"woche":null,"kaution":100,"hinweis":"Preise zzgl. MwSt."}]
+
+Text der Preisseite:
+<<<
+${text.slice(0, 40000)}
+>>>`;
+    knopf.disabled = true; status(sid, "KI liest die Preise aus … das kann bis zu einer Minute dauern.");
+    try {
+      const rows = await sample.json(prompt);
+      if (!Array.isArray(rows)) throw { code: "invalid_json" };
+      const ids = new Set(S.geraete.map((g) => g.id));
+      kiErgebnis[wid] = rows.filter((r) => r && r.bezeichnung).map((r) => ({
+        bezeichnung: String(r.bezeichnung).slice(0, 200), geraet_id: ids.has(r.geraet_id) ? r.geraet_id : null,
+        tag: zahl(r.tag), wochenende: zahl(r.wochenende), woche: zahl(r.woche), kaution: zahl(r.kaution),
+        hinweis: r.hinweis ? String(r.hinweis).slice(0, 200) : "", an: true }));
+      offen.add(wid); renderWett();
+      status(sid, kiErgebnis[wid].length ? `${kiErgebnis[wid].length} Preise gefunden. Bitte prüfen, Zuordnung ggf. ändern und speichern.` : "Im Text wurden keine Preise gefunden.");
+    } catch (e) { if (e && e.code !== "cancelled") status(sid, fehlerText(e), true); }
+    finally { knopf.disabled = false; }
+  }
+
+  function kiSpeichern(wid) {
+    const rows = (kiErgebnis[wid] || []).filter((r) => r.an);
+    if (!rows.length) { status("s-ki-" + wid, "Keine Zeile ausgewählt.", true); return; }
+    const w = S.wett.find((x) => x.id === wid) || {};
+    const quelle = (document.querySelector(`[data-ki-quelle="${CSS.escape(wid)}"]`).value || "").trim() || w.website || "";
+    speichern("s-ki-" + wid, async () => {
+      for (const r of rows) await db.collection("preise").add({ wettbewerber_id: wid, geraet_id: r.geraet_id, bezeichnung: r.bezeichnung,
+        tag: r.tag, wochenende: r.wochenende, woche: r.woche, kaution: r.kaution, hinweis: r.hinweis, quelle, stand: heute(), herkunft: "ki" });
+      delete kiErgebnis[wid]; renderWett();
+    }, `${rows.length} Preise gespeichert.`);
+  }
+
+  $("b-vorschlag").addEventListener("click", async (ev) => {
+    const ort = $("v-ort").value.trim(); const km = zahl($("v-km").value) || 30;
+    if (!ort) { status("s-vorschlag", "Bitte Ort oder PLZ eingeben.", true); return; }
+    const b = ev.currentTarget; b.disabled = true; status("s-vorschlag", "KI sucht passende Verleiher … das kann bis zu einer Minute dauern.");
+    const bekannt = S.wett.map((w) => w.name).join(", ") || "(keine)";
+    try {
+      const rows = await sample.json(`Ein Werkzeug- und Baumaschinenverleih in ${ort} möchte seine Konkurrenz im Umkreis von etwa ${km} km kennen.
+Nenne bis zu 10 Firmen, die dort Werkzeug, Baugeräte oder Baumaschinen an Privat- und Gewerbekunden vermieten: Mietparks bzw. Mietservice von Baumärkten, Baumaschinenvermieter mit Niederlassungen und regionale Verleiher.
+Nenne nur Firmen und Standorte, bei denen du sicher bist, dass es sie gibt. Keine Preise angeben. Schon bekannt (nicht wiederholen): ${bekannt}.
+Antworte nur mit einem JSON-Array: [{"name":"…","website":"www.…","ort":"Standort","hinweis":"kurz: Art des Anbieters"}]`, { cache: { gcTime: 3600000 } });
+      const liste = Array.isArray(rows) ? rows.filter((r) => r && r.name).slice(0, 10) : [];
+      $("vorschlaege").innerHTML = liste.map((r, i) => `<div class="item" data-i="${i}"><div><strong>${esc(r.name)}</strong> <span class="tag">KI-Vorschlag · prüfen</span>
+        <div class="sub">${[r.ort, r.hinweis].filter(Boolean).map(esc).join(" · ")}${href(r.website) ? ` · <a href="${esc(href(r.website))}" target="_blank" rel="noopener">${esc(host(r.website))}</a>` : ""}</div></div>
+        <button type="button" class="ghost needs-write" data-vorschlag="${i}">Übernehmen</button></div>`).join("");
+      $("vorschlaege")._daten = liste;
+      status("s-vorschlag", liste.length ? "Vorschläge bitte prüfen, bevor Sie sie übernehmen." : "Keine Vorschläge gefunden.");
+      rechte();
+    } catch (e) { status("s-vorschlag", fehlerText(e), true); }
+    finally { b.disabled = false; }
+  });
+
+  $("vorschlaege").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button[data-vorschlag]"); if (!b) return;
+    const r = ($("vorschlaege")._daten || [])[+b.dataset.vorschlag]; if (!r) return;
+    speichern("s-vorschlag", async () => {
+      await db.collection("wettbewerber").add({ name: String(r.name).slice(0, 120), website: String(r.website || "").slice(0, 200), ort: String(r.ort || "").slice(0, 120),
+        km: null, notiz: String(r.hinweis || "").slice(0, 200), herkunft: "ki", erstellt: new Date().toISOString() });
+      b.closest(".item").remove();
+    }, `„${r.name}“ übernommen.`);
+  });
+
+  // ---------- Start ----------
+  rechte();
+  (async () => {
+    if (!window.claude || !window.claude.use) { $("offline").hidden = false; return; }
+    db = await window.claude.use("db");
+    sample = await window.claude.use("sample");
+    if (!db) { $("offline").hidden = false; ["vergleich", "geraeteliste"].forEach((id) => $(id).innerHTML = ""); $("wettliste").innerHTML = ""; rechte(); return; }
+    const user = await window.claude.use("user");
+    if (user) { try { if ((await user.can("data.write")) === false) { S.canWrite = false; $("readonly").hidden = false; } } catch {} }
+    const abo = (name, key, sortFn) => db.collection(name).onSnapshot((snap) => {
+      S[key] = snap.docs.map((d) => ({ id: d.id, ...d.data() })).sort(sortFn);
+      S.ready[key[0]] = true; renderAlles();
+    }, () => { S.ready[key[0]] = true; renderAlles(); });
+    const nachName = (a, b) => String(a.name || "").localeCompare(String(b.name || ""), "de");
+    abo("geraete", "geraete", nachName);
+    abo("wettbewerber", "wett", (a, b) => (a.km ?? 9999) - (b.km ?? 9999) || nachName(a, b));
+    abo("preise", "preise", (a, b) => String(a.bezeichnung || "").localeCompare(String(b.bezeichnung || ""), "de"));
+    rechte();
+  })();
+})();
+</script>

@@ -76,3 +76,18 @@ schrittweise erweitern.
       den Gerätedateien (`kategorie`) vereinheitlichen.
 - [ ] Anzeigen **nicht automatisiert** (per Bot) einstellen – das verstößt gegen
       die Nutzungsbedingungen und kann zur Kontosperrung führen.
+
+## Preisspiegel (Konkurrenzpreise)
+
+`preisspiegel/index.html` ist der Quelltext der Preisvergleichsseite, die als
+claude.ai-Artifact veröffentlicht ist: https://claude.ai/artifact/7PdDiDHLmXudoia9Ej1X8X
+
+- Eigene Geräte mit Tages-, Wochenend- und Wochenpreis anlegen.
+- Wettbewerber (Firma, Website, Ort, Entfernung) eintragen.
+- Preise je Wettbewerber von Hand erfassen **oder** den Text der Preisseite
+  einfügen und per KI auslesen und zuordnen lassen (Ergebnis wird vor dem
+  Speichern geprüft).
+- KI-Vorschläge für Verleiher in der Region (aus KI-Wissen, ohne Live-Suche –
+  bitte prüfen).
+- Die Übersicht zeigt je Gerät den günstigsten Wettbewerber, den Durchschnitt
+  und ob der eigene Tagespreis günstiger, im Markt (±5 %) oder teurer ist.
