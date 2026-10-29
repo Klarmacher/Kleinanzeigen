@@ -5,8 +5,9 @@ name: Selbstbau-Verleih
 website: www.selbstbau-verleih.de
 telefon: "TODO: Telefonnummer"
 email: mail@selbstbau-verleih.de
-adresse: "TODO: Straße Nr., PLZ Ort"
-plz: "TODO"
+inhaber: Heiko Klischke
+adresse: "Margaretenhof 1, 14774 Brandenburg an der Havel"
+plz: "14774"
 oeffnungszeiten: "TODO: z. B. Mo–Fr 7–18 Uhr, Sa 8–12 Uhr"
 
 # Wie lange eine Anzeige bei Kleinanzeigen läuft, bevor sie verlängert
