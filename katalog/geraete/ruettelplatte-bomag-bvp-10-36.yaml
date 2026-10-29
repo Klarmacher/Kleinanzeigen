@@ -1,0 +1,25 @@
+titel: Rüttelplatte Bomag BVP 10/36
+kategorie: "Haus & Garten > Heimwerken"   # beim Einstellen bei Kleinanzeigen prüfen
+preise:            # in Euro
+  tag: 35
+  # wochenende:    # optional ergänzen
+  # woche:
+# kaution:         # optional ergänzen
+beschreibung: >   # ">" = Zeilen werden zu einem Absatz zusammengefügt
+  Handliche Vibrationsplatte von Bomag zum Verdichten von Sand, Kies, Schotter
+  und Splitt – ideal für Pflaster- und Terrassenunterbau, Gartenwege,
+  Gehwege, Einfahrten und Leitungsgräben. Mit 83 kg leicht genug, um sie
+  zu zweit in einen Kombi oder auf den Anhänger zu heben.
+technische_daten:   # Herstellerangaben Bomag
+  Betriebsgewicht: 83 kg
+  Arbeitsbreite: 36 cm
+  Zentrifugalkraft: 10 kN
+  Frequenz: 90 Hz
+zubehoer: []        # z. B. Wassertank, Gummimatte für Pflaster – falls vorhanden ergänzen
+hinweise: |
+  Wir erklären Ihnen die Bedienung gerne bei der Abholung.
+bilder: []          # Fotos in bilder/ ablegen, z. B. bilder/ruettelplatte-bomag-bvp-10-36-1.jpg
+kleinanzeigen:
+  status: entwurf
+  anzeigen_id:
+  online_seit:
