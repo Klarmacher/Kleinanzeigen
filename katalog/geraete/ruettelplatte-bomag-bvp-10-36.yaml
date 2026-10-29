@@ -18,7 +18,8 @@ technische_daten:   # Herstellerangaben Bomag
 zubehoer: []        # z. B. Wassertank, Gummimatte für Pflaster – falls vorhanden ergänzen
 hinweise: |
   Wir erklären Ihnen die Bedienung gerne bei der Abholung.
-bilder: []          # Fotos in bilder/ ablegen, z. B. bilder/ruettelplatte-bomag-bvp-10-36-1.jpg
+bilder:
+  - bilder/ruettelplatte-bomag-bvp-10-36-1.jpg
 kleinanzeigen:
   status: entwurf
   anzeigen_id:
