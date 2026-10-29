@@ -70,7 +70,8 @@ def baue_beschreibung(geraet, firma):
     if geraet.get("kaution"):
         zeilen.append(f"• Kaution: {euro(geraet['kaution'])}")
     if zeilen:
-        teile.append("Mietpreise (inkl. MwSt.):\n" + "\n".join(zeilen))
+        hinweis = (firma.get("preis_hinweis") or "inkl. MwSt.").strip()
+        teile.append(f"Mietpreise ({hinweis}):\n" + "\n".join(zeilen))
 
     if h := abschnitt(geraet.get("hinweise")):
         teile.append(h)

@@ -15,6 +15,10 @@ oeffnungszeiten: "nach telefonischer Absprache"
 # werden muss (bitte nach Kontoeinrichtung prüfen und ggf. anpassen).
 laufzeit_tage: 60
 
+# Steht in Klammern hinter "Mietpreise". Die Preise sind Bruttopreise für
+# alle Kunden (Individualabrede geht § 7 Nr. 2 der Mietbedingungen vor).
+preis_hinweis: "inkl. 19 % MwSt., für Privat- und Gewerbekunden"
+
 # Kleinanzeigen-Titel sind auf 65 Zeichen begrenzt; dieser Zusatz wird
 # angehängt, wenn noch Platz ist.
 titel_zusatz: "mieten"
