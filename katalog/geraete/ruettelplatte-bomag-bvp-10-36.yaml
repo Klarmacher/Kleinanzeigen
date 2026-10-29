@@ -16,8 +16,6 @@ technische_daten:   # Herstellerangaben Bomag
   Zentrifugalkraft: 10 kN
   Frequenz: 90 Hz
 zubehoer: []        # z. B. Wassertank, Gummimatte für Pflaster – falls vorhanden ergänzen
-hinweise: |
-  Wir erklären Ihnen die Bedienung gerne bei der Abholung.
 bilder:
   - bilder/ruettelplatte-bomag-bvp-10-36-1.jpg
 kleinanzeigen:

@@ -9,7 +9,7 @@ inhaber: Heiko Klischke
 ust_id: DE222634198
 adresse: "Margaretenhof 1, 14774 Brandenburg an der Havel"
 plz: "14774"
-oeffnungszeiten: "TODO: z. B. Mo–Fr 7–18 Uhr, Sa 8–12 Uhr"
+oeffnungszeiten: "nach telefonischer Absprache"
 
 # Wie lange eine Anzeige bei Kleinanzeigen läuft, bevor sie verlängert
 # werden muss (bitte nach Kontoeinrichtung prüfen und ggf. anpassen).
@@ -25,15 +25,17 @@ einleitung: |
   Profi-Geräte, gewartet und sofort einsatzbereit.
 
 mietbedingungen: |
-  TODO: Mietbedingungen in Kurzform, z. B.:
-  - Abholung und Rückgabe zu unseren Öffnungszeiten
-  - Personalausweis bei Abholung erforderlich
-  - Kaution in bar oder per EC-Karte
-  - Gerät gereinigt zurückgeben
-  Es gelten unsere vollständigen Mietbedingungen (siehe Website).
+  • Übergabe vollgetankt, mit Einweisung und Betriebsanleitung
+  • Der Tagespreis gilt für bis zu 8 Stunden Einsatz (Mo–Fr);
+    Wochenend- und Feiertagseinsatz bitte vorher absprechen
+  • Rückgabe gereinigt und vollgetankt; Kraftstoff wird sonst berechnet
+  • Kaution je nach Gerät
+  • Während der Mietzeit haftet der Mieter für Beschädigung und Verlust
+  Es gelten unsere Allgemeinen Mietbedingungen (Stand August 2026),
+  die wir Ihnen gerne vorab zusenden.
 
 lieferung: |
-  TODO: Lieferung möglich? z. B. "Lieferung im Umkreis von 20 km gegen Aufpreis."
+  Lieferung und Abholung auf Anfrage gegen Aufpreis.
 
 schluss: |
   Weitere Geräte finden Sie in unseren anderen Anzeigen und auf
