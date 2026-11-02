@@ -22,7 +22,21 @@ AUSGABE = ROOT / "ausgabe"
 
 TITEL_MAX = 65          # Zeichenlimit Kleinanzeigen-Titel
 BESCHREIBUNG_MAX = 4000  # Zeichenlimit Kleinanzeigen-Beschreibung
-PREIS_LABEL = {"tag": "1 Tag", "wochenende": "Wochenende", "woche": "1 Woche"}
+PREIS_LABEL = {"4_stunden": "4 Stunden", "tag": "1 Tag", "wochenende": "Wochenende", "woche": "1 Woche"}
+MWST = 0.19
+
+
+def brutto(geraet, betrag):
+    """Preise mit `netto: true` in der Gerätedatei werden in Bruttopreise umgerechnet."""
+    if betrag is None or not geraet.get("netto"):
+        return betrag
+    return round(float(betrag) * (1 + MWST), 2)
+
+
+def preis_text(geraet, betrag):
+    if geraet.get("netto"):
+        return f"{euro(brutto(geraet, betrag))} ({euro(betrag)} netto)"
+    return euro(betrag)
 
 
 def lade(pfad):
@@ -66,7 +80,9 @@ def baue_beschreibung(geraet, firma):
         teile.append("Im Lieferumfang:\n" + "\n".join(f"• {z}" for z in zub))
 
     preise = geraet.get("preise") or {}
-    zeilen = [f"• {PREIS_LABEL.get(k, k)}: {euro(v)}" for k, v in preise.items()]
+    zeilen = [f"• {PREIS_LABEL.get(k, k)}: {preis_text(geraet, v)}" for k, v in preise.items() if v is not None]
+    for extra in geraet.get("extras") or []:
+        zeilen.append(f"• {extra['name']}: + {preis_text(geraet, extra['preis'])}")
     if geraet.get("kaution"):
         zeilen.append(f"• Kaution: {euro(geraet['kaution'])}")
     if zeilen:
@@ -168,7 +184,7 @@ def render_html(eintraege, firma, firma_todos, heute):
         warn = "".join(f"<li>{html.escape(w)}</li>" for w in e["warnungen"])
         bilder = "".join(
             f'<li><code>{html.escape(b)}</code></li>' for b in g.get("bilder") or [])
-        tag = (g.get("preise") or {}).get("tag")
+        tag = brutto(g, (g.get("preise") or {}).get("tag"))
         karten.append(f"""
 <article data-status="{html.escape((g.get('kleinanzeigen') or {}).get('status') or 'entwurf')}">
   <header><h2>{html.escape(g['titel'])}</h2>{status_badge(e)}</header>

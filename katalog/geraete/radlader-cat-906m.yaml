@@ -1,0 +1,32 @@
+titel: Radlader Caterpillar 906M
+kategorie: "Auto, Rad & Boot > Nutzfahrzeuge & Anhänger"   # beim Einstellen prüfen (Baumaschinen)
+netto: true        # Preise unten sind Nettopreise; die Anzeige zeigt Brutto (inkl. 19 % MwSt.) und netto
+preise:            # in Euro, netto
+  4_stunden: 95
+  tag: 130
+  wochenende: 195
+extras:
+  - name: Palettengabel
+    preis: 15      # netto
+# kaution:         # optional ergänzen
+beschreibung: >   # ">" = Zeilen werden zu einem Absatz zusammengefügt
+  Kompakter, wendiger Radlader mit Knicklenkung – ideal für Erdarbeiten,
+  Garten- und Landschaftsbau, Hofbefestigung, Schüttgut laden und
+  Material auf der Baustelle bewegen. Mit Palettengabel (gegen Aufpreis)
+  auch zum Abladen und Umsetzen von Paletten, z. B. Pflastersteinen.
+technische_daten:   # Herstellerangaben Caterpillar / Händlerdaten
+  Betriebsgewicht: ca. 5.600 kg
+  Motorleistung: 55 kW (75 PS), Diesel
+  Schaufelinhalt: 0,9 m³
+  Überladehöhe: ca. 3,0 m
+  Höchstgeschwindigkeit: 20 km/h
+zubehoer:
+  - Standardschaufel
+hinweise: >
+  Transport: Mit rund 5,6 t Gewicht nicht mit einem PKW-Anhänger
+  transportierbar – wir liefern gerne auf die Baustelle (auf Anfrage).
+bilder: []          # Fotos in bilder/ ablegen, z. B. bilder/radlader-cat-906m-1.jpg
+kleinanzeigen:
+  status: entwurf
+  anzeigen_id:
+  online_seit:
