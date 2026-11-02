@@ -80,7 +80,9 @@ def baue_beschreibung(geraet, firma):
         teile.append("Im Lieferumfang:\n" + "\n".join(f"• {z}" for z in zub))
 
     preise = geraet.get("preise") or {}
-    zeilen = [f"• {PREIS_LABEL.get(k, k)}: {preis_text(geraet, v)}" for k, v in preise.items() if v is not None]
+    zusatz = geraet.get("preis_zusatz") or {}
+    zeilen = [f"• {PREIS_LABEL.get(k, k)}{' (' + zusatz[k] + ')' if zusatz.get(k) else ''}: {preis_text(geraet, v)}"
+              for k, v in preise.items() if v is not None]
     for extra in geraet.get("extras") or []:
         einheit = f" {extra['einheit']}" if extra.get("einheit") else ""
         zeilen.append(f"• {extra['name']}: + {preis_text(geraet, extra['preis'])}{einheit}")

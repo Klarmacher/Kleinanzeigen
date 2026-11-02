@@ -5,6 +5,9 @@ preise:            # in Euro, netto
   4_stunden: 95
   tag: 130
   wochenende: 195
+preis_zusatz:      # erscheint in Klammern hinter dem Tarif
+  tag: inkl. 8 Betriebsstunden
+  wochenende: inkl. 12 Betriebsstunden
 extras:
   - name: Palettengabel
     preis: 15      # netto
