@@ -8,7 +8,8 @@ preise:            # in Euro, netto
 extras:
   - name: Palettengabel
     preis: 15      # netto
-# kaution:         # optional ergänzen
+    einheit: pro Tag
+kaution: 300
 beschreibung: >   # ">" = Zeilen werden zu einem Absatz zusammengefügt
   Kompakter, wendiger Radlader mit Knicklenkung – ideal für Erdarbeiten,
   Garten- und Landschaftsbau, Hofbefestigung, Schüttgut laden und
@@ -24,7 +25,9 @@ zubehoer:
   - Standardschaufel
 hinweise: >
   Transport: Mit rund 5,6 t Gewicht nicht mit einem PKW-Anhänger
-  transportierbar – wir liefern gerne auf die Baustelle (auf Anfrage).
+  transportierbar – wir liefern gerne auf die Baustelle.
+lieferung: >       # ersetzt für dieses Gerät den Liefertext aus firma.yaml
+  Lieferung und Abholung: 5,95 € pro km (5 € netto).
 bilder: []          # Fotos in bilder/ ablegen, z. B. bilder/radlader-cat-906m-1.jpg
 kleinanzeigen:
   status: entwurf

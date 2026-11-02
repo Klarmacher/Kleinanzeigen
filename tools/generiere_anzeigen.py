@@ -82,7 +82,8 @@ def baue_beschreibung(geraet, firma):
     preise = geraet.get("preise") or {}
     zeilen = [f"• {PREIS_LABEL.get(k, k)}: {preis_text(geraet, v)}" for k, v in preise.items() if v is not None]
     for extra in geraet.get("extras") or []:
-        zeilen.append(f"• {extra['name']}: + {preis_text(geraet, extra['preis'])}")
+        einheit = f" {extra['einheit']}" if extra.get("einheit") else ""
+        zeilen.append(f"• {extra['name']}: + {preis_text(geraet, extra['preis'])}{einheit}")
     if geraet.get("kaution"):
         zeilen.append(f"• Kaution: {euro(geraet['kaution'])}")
     if zeilen:
@@ -93,7 +94,7 @@ def baue_beschreibung(geraet, firma):
         teile.append(h)
     if m := abschnitt(firma.get("mietbedingungen")):
         teile.append("Mietbedingungen:\n" + m)
-    if l := abschnitt(firma.get("lieferung")):
+    if l := abschnitt(geraet.get("lieferung") or firma.get("lieferung")):
         teile.append(l)
 
     kontakt = [firma["name"]]
