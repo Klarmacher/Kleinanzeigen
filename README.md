@@ -22,6 +22,16 @@ werden.
    Solange dort `TODO` steht, wird der Abschnitt in den Anzeigen weggelassen.
 3. Kleinanzeigen-Konto anlegen (siehe Checkliste unten).
 
+## Starten per Doppelklick
+
+- **Windows:** `Anzeigen-erstellen.bat` doppelklicken.
+- **Mac:** `Anzeigen-erstellen.command` doppelklicken (beim ersten Mal ggf.
+  Rechtsklick → „Öffnen“, weil die Datei aus dem Internet stammt).
+- **Linux:** `./Anzeigen-erstellen.command` im Terminal.
+
+Die Startdatei prüft, ob Python da ist, richtet beim ersten Start PyYAML ein,
+erzeugt alle Anzeigen und öffnet `ausgabe/uebersicht.html` im Browser.
+
 ## Geräte übernehmen
 
 Gerätedatei von Hand anlegen (Vorlage: `katalog/geraete/minibagger-1-5t.yaml`)
