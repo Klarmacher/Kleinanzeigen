@@ -91,6 +91,20 @@ details.w .body { padding: 0 16px 16px; display: grid; gap: 16px; min-width: 0; 
 .suggest .item { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: center;
   padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); }
 .suggest .item > div { min-width: 0; }
+button.ad { padding: 4px 9px; font-size: .78rem; margin-left: 6px; vertical-align: 1px; }
+dialog#anzeige { width: min(760px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); padding: 0; border: 1px solid var(--line);
+  border-radius: 8px; background: var(--surface); color: var(--ink); box-sizing: border-box; }
+dialog#anzeige::backdrop { background: rgba(10, 14, 20, .55); }
+dialog#anzeige .kopf { position: sticky; top: 0; background: var(--surface); display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); z-index: 1; }
+dialog#anzeige .inhalt { padding: 16px 18px 20px; display: grid; gap: 14px; }
+dialog#anzeige .feld { display: grid; gap: 6px; }
+dialog#anzeige .feld .row { justify-content: space-between; }
+dialog#anzeige .wert { font-weight: 600; overflow-wrap: anywhere; }
+dialog#anzeige textarea { min-height: 260px; font-family: var(--f-body); font-size: .86rem; line-height: 1.45; }
+.bilder { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.bilder figure { margin: 0; display: grid; gap: 6px; }
+.bilder img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 5px; }
 @media (prefers-reduced-motion: no-preference) { button { transition: filter .15s; } button:hover:not(:disabled) { filter: brightness(1.08); } }
 </style>
 
@@ -167,12 +181,30 @@ details.w .body { padding: 0 16px 16px; display: grid; gap: 16px; min-width: 0; 
       <tbody id="geraeteliste"><tr><td colspan="5" class="empty">Lade Geräte …</td></tr></tbody>
     </table></div>
   </section>
+
+  <dialog id="anzeige" aria-labelledby="anz-titel-kopf">
+    <div class="kopf"><div><div class="eyebrow">Daten für Kleinanzeigen</div><h2 id="anz-titel-kopf">Anzeige</h2></div>
+      <button type="button" class="quiet" id="anz-zu">Schließen</button></div>
+    <div class="inhalt">
+      <div class="feld"><div class="row"><span class="sub">Titel <span id="anz-titel-len"></span></span><button type="button" class="ghost" data-kopie="anz-titel">Titel kopieren</button></div>
+        <input id="anz-titel" readonly></div>
+      <div class="formgrid">
+        <div class="feld"><span class="sub">Preisfeld (Festpreis)</span><span class="wert mono" id="anz-preis"></span></div>
+        <div class="feld"><span class="sub">Kategorie</span><span class="wert" id="anz-kat"></span></div>
+      </div>
+      <div class="feld"><div class="row"><span class="sub">Beschreibung <span id="anz-text-len"></span></span><button type="button" class="ghost" data-kopie="anz-text">Text kopieren</button></div>
+        <textarea id="anz-text" readonly></textarea></div>
+      <div class="feld"><span class="sub">Bilder</span><div class="bilder" id="anz-bilder"></div></div>
+      <p class="status" id="s-anz" role="status"></p>
+      <p class="note" id="anz-stand"></p>
+    </div>
+  </dialog>
 </div>
 
 <script>
 (() => {
-  const S = { geraete: [], wett: [], preise: [], canWrite: true, ready: { g: false, w: false, p: false } };
-  let db = null, sample = null;
+  const S = { geraete: [], wett: [], preise: [], anzeigen: {}, canWrite: true, ready: { g: false, w: false, p: false } };
+  let db = null, sample = null, downloads = null;
   const offen = new Set();          // aufgeklappte Wettbewerber
   const offenGeraet = new Set();    // aufgeklappte Vergleichszeilen
   const kiErgebnis = {};            // wettbewerberId -> Zeilen zur Prüfung
@@ -222,7 +254,7 @@ details.w .body { padding: 0 16px 16px; display: grid; gap: 16px; min-width: 0; 
       const minP = angebote.find((p) => p.tag === min);
       const auf = offenGeraet.has(g.id);
       let html = `<tr data-geraet="${esc(g.id)}" style="cursor:pointer" aria-expanded="${auf}">
-        <td><strong>${esc(g.name)}</strong>${g.beispiel ? ' <span class="tag">Beispiel</span>' : ""}</td>
+        <td><strong>${esc(g.name)}</strong>${g.beispiel ? ' <span class="tag">Beispiel</span>' : ""}${S.anzeigen[g.id] ? `<button type="button" class="ghost ad" data-act="anzeige" data-id="${esc(g.id)}" aria-label="Anzeige für ${esc(g.name)}">Anzeige</button>` : ""}</td>
         <td class="num">${euro(g.tag)}</td>
         <td class="num">${euro(min)}${minP ? `<div class="sub">${esc(wettName(minP.wettbewerber_id))}</div>` : ""}</td>
         <td class="num">${euro(avg == null ? null : Math.round(avg * 100) / 100)}</td>
@@ -313,11 +345,50 @@ details.w .body { padding: 0 16px 16px; display: grid; gap: 16px; min-width: 0; 
     const tb = $("geraeteliste");
     if (!S.ready.g) return;
     if (!S.geraete.length) { tb.innerHTML = '<tr><td colspan="5" class="empty">Noch keine Geräte. Oben das erste Gerät mit Preisen eintragen.</td></tr>'; return; }
-    tb.innerHTML = S.geraete.map((g) => `<tr><td>${esc(g.name)}${g.beispiel ? ' <span class="tag">Beispiel</span>' : ""}</td>
+    tb.innerHTML = S.geraete.map((g) => `<tr><td>${esc(g.name)}${g.beispiel ? ' <span class="tag">Beispiel</span>' : ""}${S.anzeigen[g.id] ? `<button type="button" class="ghost ad" data-act="anzeige" data-id="${esc(g.id)}" aria-label="Anzeige für ${esc(g.name)}">Anzeige</button>` : ""}</td>
       <td class="num">${euro(g.tag)}</td><td class="num">${euro(g.wochenende)}</td><td class="num">${euro(g.woche)}</td>
       <td style="text-align:right"><button type="button" class="quiet needs-write" data-act="del-g" data-id="${esc(g.id)}">${loeschen.has("g:" + g.id) ? "Sicher?" : "Entfernen"}</button></td></tr>`).join("");
     rechte();
   }
+
+  function zeigeAnzeige(id) {
+    const a = S.anzeigen[id]; if (!a) return;
+    const g = S.geraete.find((x) => x.id === id) || {};
+    $("anz-titel-kopf").textContent = g.name || a.titel || "Anzeige";
+    $("anz-titel").value = a.titel || ""; $("anz-titel-len").textContent = `(${(a.titel || "").length}/65)`;
+    $("anz-text").value = a.text || ""; $("anz-text-len").textContent = `(${(a.text || "").length}/4000)`;
+    $("anz-preis").textContent = a.preisfeld != null ? euro(a.preisfeld) : "–";
+    $("anz-kat").textContent = a.kategorie || "–";
+    $("anz-stand").textContent = a.stand ? `Stand ${datum(a.stand)} · erzeugt mit dem Anzeigen-Generator im Repository` : "";
+    const bilder = Array.isArray(a.bilder) ? a.bilder : [];
+    $("anz-bilder").innerHTML = bilder.length ? bilder.map((b, i) => `<figure><img src="${esc(b.url)}" alt="${esc(b.name)}">
+      <button type="button" class="ghost" data-bild="${i}">Bild speichern</button></figure>`).join("") : '<p class="sub">Noch kein Bild hinterlegt.</p>';
+    $("anz-bilder")._bilder = bilder;
+    status("s-anz", "");
+    $("anzeige").showModal();
+  }
+  $("anz-zu").addEventListener("click", () => $("anzeige").close());
+  $("anzeige").addEventListener("click", async (ev) => {
+    if (ev.target === $("anzeige")) { $("anzeige").close(); return; }
+    const k = ev.target.closest("button[data-kopie]");
+    if (k) {
+      const el = $(k.dataset.kopie);
+      const fertig = () => { const t = k.textContent; k.textContent = "Kopiert ✓"; setTimeout(() => k.textContent = t, 1500); };
+      try { await navigator.clipboard.writeText(el.value); fertig(); }
+      catch { el.focus(); el.select(); status("s-anz", "Text ist markiert – jetzt mit Strg+C (Mac: Cmd+C) kopieren."); }
+      return;
+    }
+    const b = ev.target.closest("button[data-bild]");
+    if (b) {
+      const bild = ($("anz-bilder")._bilder || [])[+b.dataset.bild]; if (!bild) return;
+      if (!downloads) { status("s-anz", "Speichern ist hier nicht möglich. Rechtsklick auf das Bild → „Bild speichern unter …“.", true); return; }
+      try {
+        const blob = await (await fetch(bild.url)).blob();
+        await downloads.save({ filename: bild.name || "bild.jpg", data: blob });
+        status("s-anz", "Bild gespeichert.");
+      } catch (e) { if (e && e.code !== "cancelled" && e.code !== "declined") status("s-anz", "Das Bild konnte nicht gespeichert werden.", true); }
+    }
+  });
 
   function renderAlles() { renderVergleich(); renderWett(); renderGeraete(); }
   function rechte() {
@@ -376,6 +447,8 @@ details.w .body { padding: 0 16px 16px; display: grid; gap: 16px; min-width: 0; 
   }
 
   document.addEventListener("click", (ev) => {
+    const ab = ev.target.closest("button[data-act=anzeige]");
+    if (ab) { zeigeAnzeige(ab.dataset.id); return; }
     const zeile = ev.target.closest("tr[data-geraet]");
     if (zeile) { const id = zeile.dataset.geraet; offenGeraet.has(id) ? offenGeraet.delete(id) : offenGeraet.add(id); renderVergleich(); return; }
     const b = ev.target.closest("button[data-act]"); if (!b) return;
@@ -479,6 +552,7 @@ Antworte nur mit einem JSON-Array: [{"name":"…","website":"www.…","ort":"Sta
     if (!window.claude || !window.claude.use) { $("offline").hidden = false; return; }
     db = await window.claude.use("db");
     sample = await window.claude.use("sample");
+    downloads = await window.claude.use("downloads");
     if (!db) { $("offline").hidden = false; ["vergleich", "geraeteliste"].forEach((id) => $(id).innerHTML = ""); $("wettliste").innerHTML = ""; rechte(); return; }
     const user = await window.claude.use("user");
     if (user) { try { if ((await user.can("data.write")) === false) { S.canWrite = false; $("readonly").hidden = false; } } catch {} }
@@ -489,6 +563,9 @@ Antworte nur mit einem JSON-Array: [{"name":"…","website":"www.…","ort":"Sta
     const nachName = (a, b) => String(a.name || "").localeCompare(String(b.name || ""), "de");
     abo("geraete", "geraete", nachName);
     abo("wettbewerber", "wett", (a, b) => (a.km ?? 9999) - (b.km ?? 9999) || nachName(a, b));
+    db.collection("anzeigen").onSnapshot((snap) => {
+      S.anzeigen = Object.fromEntries(snap.docs.map((d) => [d.id, d.data()])); renderVergleich(); renderGeraete();
+    }, () => {});
     abo("preise", "preise", (a, b) => String(a.bezeichnung || "").localeCompare(String(b.bezeichnung || ""), "de"));
     rechte();
   })();

@@ -101,3 +101,7 @@ claude.ai-Artifact veröffentlicht ist: https://claude.ai/artifact/7PdDiDHLmXudo
   bitte prüfen).
 - Die Übersicht zeigt je Gerät den günstigsten Wettbewerber, den Durchschnitt
   und ob der eigene Tagespreis günstiger, im Markt (±5 %) oder teurer ist.
+- Bei jedem Gerät mit fertiger Anzeige führt der Knopf **„Anzeige“** zu Titel,
+  Preisfeld, Kategorie, Beschreibung und Fotos – mit Kopier- und Speicherknöpfen.
+  Die Daten stammen aus `ausgabe/anzeigen.json` (vom Generator erzeugt) und
+  werden von Claude in den Preisspiegel übertragen.

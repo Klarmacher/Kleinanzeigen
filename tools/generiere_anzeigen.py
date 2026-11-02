@@ -11,6 +11,7 @@ Ergebnis:
 
 import datetime
 import html
+import json
 import sys
 from pathlib import Path
 
@@ -162,6 +163,15 @@ def main():
         })
 
     firma_todos = [k for k, v in firma.items() if isinstance(v, str) and "TODO" in v]
+    # Für den Preisspiegel: je Gerät die fertigen Anzeigendaten
+    export = {e["slug"]: {
+        "titel": e["titel"], "text": e["text"],
+        "preisfeld": brutto(e["geraet"], (e["geraet"].get("preise") or {}).get("tag")),
+        "kategorie": e["geraet"].get("kategorie", ""),
+        "bilder": e["geraet"].get("bilder") or [],
+        "stand": heute.isoformat()} for e in eintraege}
+    (AUSGABE / "anzeigen.json").write_text(json.dumps(export, ensure_ascii=False, indent=1), encoding="utf-8")
+
     (AUSGABE / "uebersicht.html").write_text(
         render_html(eintraege, firma, firma_todos, heute), encoding="utf-8")
 
