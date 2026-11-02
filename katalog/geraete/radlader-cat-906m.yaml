@@ -27,8 +27,11 @@ hinweise: >
   Transport: Mit rund 5,6 t Gewicht nicht mit einem PKW-Anhänger
   transportierbar – wir liefern gerne auf die Baustelle.
 lieferung: >       # ersetzt für dieses Gerät den Liefertext aus firma.yaml
-  Lieferung und Abholung: 5,95 € pro km (5 € netto).
-bilder: []          # Fotos in bilder/ ablegen, z. B. bilder/radlader-cat-906m-1.jpg
+  Lieferung und Abholung: 5,95 € (5 € netto) pro km einfache Strecke,
+  die Rückfahrt wird genauso berechnet. Beispiel: Baustelle 10 km entfernt
+  = 119 € (100 € netto) für die Lieferung, ebenso für die Abholung.
+bilder:
+  - bilder/radlader-cat-906m-1.jpg
 kleinanzeigen:
   status: entwurf
   anzeigen_id:
