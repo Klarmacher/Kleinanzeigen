@@ -121,10 +121,10 @@ dialog#anzeige textarea { min-height: 260px; font-family: var(--f-body); font-si
   <section id="sec-vergleich">
     <div class="sec-head">
       <div><div class="eyebrow">Übersicht</div><h2>Tagespreis im Vergleich</h2></div>
-      <p>Abweichung Ihres Tagespreises vom Durchschnitt der Wettbewerber. Zeile antippen für Details.</p>
+      <p>Abweichung Ihres Tagespreises vom Durchschnitt der Wettbewerber, alles netto (zzgl. MwSt.). Zeile antippen für Details.</p>
     </div>
     <div class="tablebox"><table>
-      <thead><tr><th>Gerät</th><th class="num">Ihr Preis / Tag</th><th class="num">Günstigster</th><th class="num">Ø Wettbewerb</th><th class="num">Angebote</th><th>Einordnung</th></tr></thead>
+      <thead><tr><th>Gerät</th><th class="num">Ihr Preis / Tag netto</th><th class="num">Günstigster netto</th><th class="num">Ø Wettbewerb netto</th><th class="num">Angebote</th><th>Einordnung</th></tr></thead>
       <tbody id="vergleich"><tr><td colspan="6" class="empty">Lade Daten …</td></tr></tbody>
     </table></div>
   </section>
@@ -213,6 +213,7 @@ dialog#anzeige textarea { min-height: 260px; font-family: var(--f-body); font-si
   const $ = (id) => document.getElementById(id);
   const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const zahl = (v) => { if (v === "" || v == null) return null; const n = Number(String(v).replace(",", ".")); return Number.isFinite(n) ? n : null; };
+  const netto = (n) => n == null ? null : Math.round(n / 1.19 * 100) / 100;
   const euro = (n) => n == null ? "–" : n.toLocaleString("de-DE", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + " €";
   const datum = (iso) => iso ? new Date(iso).toLocaleDateString("de-DE") : "";
   const heute = () => new Date().toISOString().slice(0, 10);
@@ -253,22 +254,23 @@ dialog#anzeige textarea { min-height: 260px; font-family: var(--f-body); font-si
       const avg = tage.length ? tage.reduce((a, b) => a + b, 0) / tage.length : null;
       const minP = angebote.find((p) => p.tag === min);
       const auf = offenGeraet.has(g.id);
+      const eigenNetto = netto(g.tag);
       let html = `<tr data-geraet="${esc(g.id)}" style="cursor:pointer" aria-expanded="${auf}">
         <td><strong>${esc(g.name)}</strong>${g.beispiel ? ' <span class="tag">Beispiel</span>' : ""}${S.anzeigen[g.id] ? `<button type="button" class="ghost ad" data-act="anzeige" data-id="${esc(g.id)}" aria-label="Anzeige für ${esc(g.name)}">Anzeige</button>` : ""}</td>
-        <td class="num">${euro(g.tag)}</td>
+        <td class="num">${euro(eigenNetto)}${g.tag != null ? `<div class="sub">${euro(g.tag)} brutto</div>` : ""}</td>
         <td class="num">${euro(min)}${minP ? `<div class="sub">${esc(wettName(minP.wettbewerber_id))}</div>` : ""}</td>
         <td class="num">${euro(avg == null ? null : Math.round(avg * 100) / 100)}</td>
         <td class="num">${angebote.length}</td>
-        <td>${einordnung(g.tag, avg)}</td></tr>`;
+        <td>${einordnung(eigenNetto, avg)}</td></tr>`;
       if (auf) {
         const alle = S.preise.filter((p) => p.geraet_id === g.id);
         html += `<tr class="detail"><td colspan="6">${alle.length ? `<div class="tablebox" style="border:0;background:transparent"><table style="min-width:560px">
-          <thead><tr><th>Wettbewerber</th><th>Bezeichnung dort</th><th class="num">Tag</th><th class="num">Wochenende</th><th class="num">Woche</th><th class="num">Kaution</th><th>Stand</th></tr></thead><tbody>
+          <thead><tr><th>Wettbewerber</th><th>Bezeichnung dort</th><th class="num">Tag netto</th><th class="num">Wochenende netto</th><th class="num">Woche netto</th><th class="num">Kaution</th><th>Stand</th></tr></thead><tbody>
           ${alle.map((p) => `<tr><td>${esc(wettName(p.wettbewerber_id))}</td><td>${esc(p.bezeichnung)}${p.hinweis ? `<div class="sub">${esc(p.hinweis)}</div>` : ""}</td>
             <td class="num">${euro(p.tag)}</td><td class="num">${euro(p.wochenende)}</td><td class="num">${euro(p.woche)}</td><td class="num">${euro(p.kaution)}</td>
             <td><span class="sub">${esc(datum(p.stand))}</span>${href(p.quelle) ? ` <a href="${esc(href(p.quelle))}" target="_blank" rel="noopener">Quelle</a>` : ""}</td></tr>`).join("")}
           </tbody></table></div>` : '<p class="sub">Für dieses Gerät sind noch keine Wettbewerbspreise erfasst.</p>'}
-          <p class="sub" style="margin-top:6px">Ihre Preise: Wochenende ${euro(g.wochenende)} · Woche ${euro(g.woche)}</p></td></tr>`;
+          <p class="sub" style="margin-top:6px">Ihre Preise netto: Wochenende ${euro(netto(g.wochenende))} · Woche ${euro(netto(g.woche))}</p></td></tr>`;
       }
       return html;
     }).join("");
@@ -299,7 +301,7 @@ dialog#anzeige textarea { min-height: 260px; font-family: var(--f-body); font-si
             <div class="sub">${href(w.website) ? `<a href="${esc(href(w.website))}" target="_blank" rel="noopener">${esc(host(w.website))}</a>` : "Keine Website hinterlegt"}${w.notiz ? ` · ${esc(w.notiz)}` : ""}</div>
             <button type="button" class="danger needs-write" data-act="del-w" data-id="${esc(w.id)}">${loeschen.has("w:" + w.id) ? "Wirklich löschen?" : "Wettbewerber löschen"}</button>
           </div>
-          ${pr.length ? `<div class="tablebox"><table style="min-width:600px"><thead><tr><th>Bezeichnung</th><th>Ihr Gerät</th><th class="num">Tag</th><th class="num">Wochenende</th><th class="num">Woche</th><th class="num">Kaution</th><th></th></tr></thead><tbody>
+          ${pr.length ? `<div class="tablebox"><table style="min-width:600px"><thead><tr><th>Bezeichnung</th><th>Ihr Gerät</th><th class="num">Tag netto</th><th class="num">Wochenende netto</th><th class="num">Woche netto</th><th class="num">Kaution</th><th></th></tr></thead><tbody>
             ${pr.map((p) => `<tr><td>${esc(p.bezeichnung)}<div class="sub">${esc(datum(p.stand))}${p.herkunft === "ki" ? " · per KI ausgelesen" : ""}${p.hinweis ? " · " + esc(p.hinweis) : ""}</div></td>
               <td><select data-act="map" data-id="${esc(p.id)}" class="needs-write" aria-label="Zuordnung">${geraeteOptionen(p.geraet_id)}</select></td>
               <td class="num">${euro(p.tag)}</td><td class="num">${euro(p.wochenende)}</td><td class="num">${euro(p.woche)}</td><td class="num">${euro(p.kaution)}</td>
@@ -308,12 +310,13 @@ dialog#anzeige textarea { min-height: 260px; font-family: var(--f-body); font-si
 
           <div class="box">
             <h3>Preis von Hand erfassen</h3>
+            <p class="note">Preise bitte <strong>netto</strong> (zzgl. MwSt.) eintragen. Brutto-Preise vorher durch 1,19 teilen.</p>
             <form data-form="preis" data-w="${esc(w.id)}" autocomplete="off">
               <label>Ihr Gerät<select name="geraet">${geraeteOptionen("")}</select></label>
               <label>Bezeichnung dort<input name="bez" required placeholder="wie beim Wettbewerber genannt"></label>
-              <label>1 Tag<input name="tag" type="number" min="0" step="0.01" inputmode="decimal"></label>
-              <label>Wochenende<input name="we" type="number" min="0" step="0.01" inputmode="decimal"></label>
-              <label>1 Woche<input name="woche" type="number" min="0" step="0.01" inputmode="decimal"></label>
+              <label>1 Tag netto<input name="tag" type="number" min="0" step="0.01" inputmode="decimal"></label>
+              <label>Wochenende netto<input name="we" type="number" min="0" step="0.01" inputmode="decimal"></label>
+              <label>1 Woche netto<input name="woche" type="number" min="0" step="0.01" inputmode="decimal"></label>
               <label>Kaution<input name="kaution" type="number" min="0" step="1" inputmode="decimal"></label>
               <label class="wide">Quelle (Link zur Preisseite)<input name="quelle" placeholder="${esc(w.website || "https://…")}"></label>
               <div class="row"><button type="submit" class="needs-write">Preis speichern</button></div>
@@ -327,7 +330,7 @@ dialog#anzeige textarea { min-height: 260px; font-family: var(--f-body); font-si
             <label>Quelle (Link zur Preisseite)<input data-ki-quelle="${esc(w.id)}" placeholder="${esc(w.website || "https://…")}"></label>
             <div class="row"><button type="button" class="ghost" data-act="ki" data-id="${esc(w.id)}">Preise auslesen</button></div>
             <p class="status" id="s-ki-${esc(w.id)}" role="status"></p>
-            ${ki && ki.length ? `<div class="tablebox"><table style="min-width:600px"><thead><tr><th>Übernehmen</th><th>Bezeichnung</th><th>Ihr Gerät</th><th class="num">Tag</th><th class="num">WE</th><th class="num">Woche</th><th class="num">Kaution</th></tr></thead><tbody>
+            ${ki && ki.length ? `<div class="tablebox"><table style="min-width:600px"><thead><tr><th>Übernehmen</th><th>Bezeichnung</th><th>Ihr Gerät</th><th class="num">Tag netto</th><th class="num">WE netto</th><th class="num">Woche netto</th><th class="num">Kaution</th></tr></thead><tbody>
               ${ki.map((r, i) => `<tr><td><input type="checkbox" data-ki-chk="${esc(w.id)}" data-i="${i}" ${r.an ? "checked" : ""} aria-label="übernehmen"></td>
                 <td>${esc(r.bezeichnung)}${r.hinweis ? `<div class="sub">${esc(r.hinweis)}</div>` : ""}</td>
                 <td><select data-ki-map="${esc(w.id)}" data-i="${i}" aria-label="Zuordnung">${geraeteOptionen(r.geraet_id)}</select></td>
@@ -476,13 +479,14 @@ Aufgabe: Alle Mietpreise aus dem Text herauslesen und, wenn eindeutig vergleichb
 Regeln:
 - Nur Zahlen übernehmen, die wörtlich im Text stehen. Nichts schätzen oder ergänzen. Fehlt ein Wert: null.
 - "tag" = Preis für 1 Tag (bzw. 24 h), "wochenende" = Wochenendpreis, "woche" = Preis für 1 Woche, "kaution" = Kaution. Alles in Euro als Zahl.
-- Steht dabei, dass Preise netto bzw. zzgl. MwSt. sind, oder gilt ein Preis nur für einen halben Tag o. ä.: kurz in "hinweis" vermerken.
+- Alle Preise NETTO (ohne MwSt.) angeben. Sind die Preise im Text brutto bzw. inkl. MwSt. (oder ist das unklar, z. B. bei Angeboten für Privatkunden), durch 1,19 teilen, auf 2 Nachkommastellen runden und in "hinweis" "aus brutto umgerechnet" vermerken. Gilt ein Preis nur für einen halben Tag o. ä.: ebenfalls kurz in "hinweis" vermerken.
+- Die Kaution unverändert übernehmen (keine MwSt.).
 - "geraet_id" = ID aus unserer Liste, wenn es dasselbe oder ein klar vergleichbares Gerät ist (gleiche Geräteart und ähnliche Größe/Gewichtsklasse), sonst null.
 Unsere Geräte (ID: Name):
 ${liste}
 
 Antworte nur mit einem JSON-Array, z. B.:
-[{"bezeichnung":"Rüttelplatte 90 kg","geraet_id":null,"tag":39,"wochenende":59,"woche":null,"kaution":100,"hinweis":"Preise zzgl. MwSt."}]
+[{"bezeichnung":"Rüttelplatte 90 kg","geraet_id":null,"tag":39,"wochenende":59,"woche":null,"kaution":100,"hinweis":""}]
 
 Text der Preisseite:
 <<<
