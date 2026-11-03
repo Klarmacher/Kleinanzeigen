@@ -95,7 +95,7 @@ def baue_beschreibung(geraet, firma):
 
     if h := abschnitt(geraet.get("hinweise")):
         teile.append(h)
-    if m := abschnitt(firma.get("mietbedingungen")):
+    if m := abschnitt(geraet.get("mietbedingungen") or firma.get("mietbedingungen")):
         teile.append("Mietbedingungen:\n" + m)
     if l := abschnitt(geraet.get("lieferung") or firma.get("lieferung")):
         teile.append(l)
