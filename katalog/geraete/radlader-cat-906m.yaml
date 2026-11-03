@@ -6,6 +6,7 @@ preise:            # in Euro, netto
   tag: 130
   wochenende: 195
 preis_zusatz:      # erscheint in Klammern hinter dem Tarif
+  4_stunden: inkl. 4 Betriebsstunden
   tag: inkl. 8 Betriebsstunden
   wochenende: inkl. 12 Betriebsstunden
 extras:

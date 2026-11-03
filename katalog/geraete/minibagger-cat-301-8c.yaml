@@ -6,7 +6,7 @@ preise:            # in Euro, netto
   tag: 105
   wochenende: 157.5
 preis_zusatz:      # erscheint in Klammern hinter dem Tarif
-  4_stunden: inkl. 1 Schaufel nach Wahl
+  4_stunden: inkl. 4 Betriebsstunden und 1 Schaufel nach Wahl
   tag: inkl. 8 Betriebsstunden und 1 Schaufel nach Wahl
   wochenende: inkl. 12 Betriebsstunden und 1 Schaufel nach Wahl
 extras:
