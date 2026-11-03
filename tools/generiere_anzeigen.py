@@ -10,6 +10,7 @@ Ergebnis:
 """
 
 import datetime
+from decimal import ROUND_HALF_UP, Decimal
 import html
 import json
 import sys
@@ -31,7 +32,9 @@ def brutto(geraet, betrag):
     """Preise mit `netto: true` in der Gerätedatei werden in Bruttopreise umgerechnet."""
     if betrag is None or not geraet.get("netto"):
         return betrag
-    return round(float(betrag) * (1 + MWST), 2)
+    # kaufmännisch runden (187,425 → 187,43), nicht float-round (→ 187,42)
+    wert = Decimal(str(betrag)) * (1 + Decimal(str(MWST)))
+    return float(wert.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
 
 
 def preis_text(geraet, betrag):

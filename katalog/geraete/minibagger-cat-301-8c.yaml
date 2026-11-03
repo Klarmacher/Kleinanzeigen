@@ -1,0 +1,39 @@
+titel: Minibagger Cat 301.8C
+kategorie: "Auto, Rad & Boot > Nutzfahrzeuge & Anhänger"   # beim Einstellen prüfen (Baumaschinen)
+netto: true        # Preise unten sind Nettopreise; die Anzeige zeigt Brutto (inkl. 19 % MwSt.) und netto
+preise:            # in Euro, netto
+  4_stunden: 75
+  tag: 105
+  wochenende: 157.5
+preis_zusatz:      # erscheint in Klammern hinter dem Tarif
+  4_stunden: inkl. 1 Schaufel nach Wahl
+  tag: inkl. 1 Schaufel nach Wahl
+  wochenende: inkl. 1 Schaufel nach Wahl
+extras:
+  - name: Schwenkmulde 100 cm
+    preis: 15      # netto
+    einheit: pro Tag   # TODO beim Kunden bestätigen: pro Tag oder pro Miete?
+kaution: 300
+beschreibung: >   # ">" = Zeilen werden zu einem Absatz zusammengefügt
+  Kompakter Minibagger von Caterpillar in der 1,8-Tonnen-Klasse – ideal
+  für Gartenbau, Fundamente, Leitungs- und Drainagegräben, Teichbau,
+  Wurzelstöcke und Erdarbeiten auf engem Raum. Im Mietpreis ist eine
+  Tieflöffel-Anbauschaufel nach Wahl enthalten: 30 cm, 50 cm oder 100 cm
+  breit. Zum Planieren und Böschungen anlegen gibt es zusätzlich eine
+  100-cm-Schwenkmulde.
+technische_daten:   # bitte am Gerät / Typenschild prüfen
+  Gewichtsklasse: ca. 1,8 t
+  Antrieb: Diesel
+zubehoer:
+  - "1 Anbauschaufel nach Wahl: 30 cm, 50 cm oder 100 cm (im Mietpreis enthalten)"
+  - Schwenkmulde 100 cm (gegen Aufpreis)
+hinweise: >
+  Transport: Ein passender Transportanhänger kann separat dazugemietet
+  werden. Zum Ziehen brauchen Sie ein Zugfahrzeug mit ausreichender
+  Anhängelast und in der Regel einen Führerschein der Klasse BE – wir
+  beraten Sie gerne.
+bilder: []          # Foto folgt
+kleinanzeigen:
+  status: entwurf
+  anzeigen_id:
+  online_seit:
