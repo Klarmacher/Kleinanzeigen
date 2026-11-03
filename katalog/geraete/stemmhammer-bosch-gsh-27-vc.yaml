@@ -5,15 +5,15 @@ preise:            # in Euro, netto
   tag: 40
   wochenende: 60
 preis_zusatz:      # erscheint in Klammern hinter dem Tarif
-  tag: inkl. Meißel
-  wochenende: inkl. Meißel
-# kaution:         # optional ergänzen
+  tag: inkl. Spitzmeißel
+  wochenende: inkl. Spitzmeißel
+# keine Kaution
 beschreibung: >   # ">" = Zeilen werden zu einem Absatz zusammengefügt
   Schwerer Abbruch- und Stemmhammer der 30-kg-Klasse von Bosch für richtig
   grobe Arbeiten: Betonböden und Fundamente aufbrechen, Mauerwerk abtragen,
   Estrich und Fliesen entfernen, Asphalt aufstemmen. Die Vibration-Control-Dämpfung
   schont Hände und Arme, so lässt sich auch länger ermüdungsarm
-  arbeiten. Meißel ist im Mietpreis enthalten.
+  arbeiten. Spitzmeißel ist im Mietpreis enthalten, eine Kaution fällt nicht an.
 technische_daten:   # Herstellerangaben Bosch
   Nennaufnahmeleistung: 2.000 W
   Einzelschlagstärke: 62 J
@@ -21,7 +21,7 @@ technische_daten:   # Herstellerangaben Bosch
   Gewicht: ca. 29,5 kg
   Werkzeugaufnahme: 28 mm Sechskant
 zubehoer:
-  - Meißel (im Mietpreis enthalten)
+  - Spitzmeißel (im Mietpreis enthalten)
 hinweise: >
   Transport: Passt mit rund 30 kg problemlos in jeden Kombi oder Kofferraum.
   Normaler 230-V-Anschluss genügt.
@@ -30,11 +30,12 @@ mietbedingungen: |   # ersetzt für dieses Elektrogerät die Bedingungen aus fir
   • Der Tagespreis gilt für bis zu 8 Stunden Einsatz (Mo–Fr);
     Wochenend- und Feiertagseinsatz bitte vorher absprechen
   • Rückgabe gereinigt
-  • Kaution je nach Gerät
+  • Keine Kaution
   • Während der Mietzeit haftet der Mieter für Beschädigung und Verlust
   Es gelten unsere Allgemeinen Mietbedingungen (Stand August 2026),
   die wir Ihnen gerne vorab zusenden.
-bilder: []          # Foto folgt
+bilder:
+  - bilder/stemmhammer-bosch-gsh-27-vc-1.jpg
 kleinanzeigen:
   status: entwurf
   anzeigen_id:
