@@ -87,6 +87,31 @@ schrittweise erweitern.
 - [ ] Anzeigen **nicht automatisiert** (per Bot) einstellen – das verstößt gegen
       die Nutzungsbedingungen und kann zur Kontosperrung führen.
 
+## Auf dem eigenen PC speichern und mit GitHub abgleichen (Windows)
+
+Einmalig einrichten:
+
+1. **Git für Windows** installieren: https://git-scm.com/download/win
+   (alle Voreinstellungen übernehmen).
+2. **GitHub Desktop** installieren: https://desktop.github.com und mit dem
+   GitHub-Konto anmelden.
+3. In GitHub Desktop: *File → Clone repository* → `Klarmacher/Kleinanzeigen`
+   wählen, als Ziel z. B. `C:\Selbstbau-Verleih` angeben → *Clone*.
+4. Oben bei *Current branch* den Zweig `claude/adoring-dirac-80l6ro` wählen
+   (dort liegen alle Anzeigen).
+5. Im Ordner `C:\Selbstbau-Verleih\Kleinanzeigen` doppelt auf
+   **GitHub-Sync-einrichten.bat** klicken. Beim ersten Mal öffnet sich ggf.
+   ein Fenster zur GitHub-Anmeldung.
+
+Danach gleicht Windows den Ordner **jede Stunde** automatisch mit GitHub ab:
+eigene Änderungen werden hochgeladen, neue Anzeigen von Claude werden
+heruntergeladen. Sofort abgleichen: **GitHub-Synchronisieren.bat**
+doppelklicken. Protokoll: `sync-log.txt`.
+
+Hinweis: Wird dieselbe Datei gleichzeitig am PC und von Claude geändert,
+bricht der Abgleich mit einer Fehlermeldung ab, statt etwas zu überschreiben.
+Dann Claude Bescheid geben.
+
 ## Preisspiegel (Konkurrenzpreise)
 
 `preisspiegel/index.html` ist der Quelltext der Preisvergleichsseite, die als
